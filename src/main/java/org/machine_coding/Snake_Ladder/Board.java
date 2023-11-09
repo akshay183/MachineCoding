@@ -1,20 +1,31 @@
 package org.machine_coding.Snake_Ladder;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 public class Board {
 
-    int numDice;
-    int[][] boardSize;
-    Queue<Player> playerQueue;
+    private final int boardSize;
+    private final int numDice;
+    private final Queue<Player> playerQueue;
+    private Map<Integer, Position> playerPosition;
+    private Map<Integer, Integer> boardDistribution;  // return final location position as value.
 
-    public Board(int numDice, List<Player> players, int boardX, int boardY) {
+
+    public Board(int numDice, List<Player> players, int boardSize) {
+
         this.numDice = numDice;
         playerQueue = new LinkedList<>(players);
-        boardSize = new int[boardX][boardY];
+        this.boardSize = boardSize;
+        playerPosition = new HashMap<>();
+        boardDistribution = new HashMap<>();
+
+        distributeBoard();
+    }
+
+    //randomise distribution of snakes and ladder.
+    private void distributeBoard() {
+
+
     }
 
     // roll dice
