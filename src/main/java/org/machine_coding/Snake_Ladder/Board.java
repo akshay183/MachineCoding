@@ -8,7 +8,7 @@ public class Board {
     private final int numDice;
     private final Queue<Player> playerQueue;
     private Map<Integer, Position> playerPosition; // put(playerId, position)
-    private Map<Position, Position> boardDistribution;  // return final location position as value.
+    private Map<Integer, Integer> boardDistribution;  // return final location position as value.
 
 
     public Board(int numDice, List<Player> players, int boardSize) {
@@ -40,11 +40,12 @@ public class Board {
              Position finalPos = new Position(random.nextInt((initialPos.getCoordinate()+15) -
                      (initialPos.getCoordinate()-15) + 1) + (initialPos.getCoordinate()-15));
 
-             if(finalPos.getCoordinate() >= boardSize || boardDistribution.containsKey(initialPos)) {
+             if(finalPos.getCoordinate() >= boardSize || boardDistribution.containsKey(initialPos.getCoordinate())
+                     || finalPos.getCoordinate() == initialPos.getCoordinate()) {
                  i--;
                  continue;
              }
-             boardDistribution.put(initialPos, finalPos);
+             boardDistribution.put(initialPos.getCoordinate(), finalPos.getCoordinate());
         }
     }
 
@@ -71,6 +72,45 @@ public class Board {
         * 5.if its on final winning position return.
         * 6.push player in queue again.
         */
+        Position playerPos = playerPosition.get(nextPlayer.getId());
+        int playerNextCoord = playerPos.getCoordinate() + moveCount;
+
+        if(playerNextCoord > boardSize) {
+
+            System.out.println("Move dont Count as out of board");
+        }
+        else if(playerNextCoord == boardSize) {
+
+            System.out.println(nextPlayer.getPlayerName() + " reached final position");
+            playerPosition.remove(nextPlayer.getId());
+            return;
+        }
+        else if(boardDistribution.containsKey(playerNextCoord)) {
+
+            int playerJumpCoord = boardDistribution.get(playerNextCoord);
+            if(playerJumpCoord > playerNextCoord) {
+
+                System.out.println(nextPlayer.getPlayerName() + " took ladder and went from " +
+                        playerNextCoord + " to " + playerJumpCoord);
+            }
+            else {
+
+                System.out.println(nextPlayer.getPlayerName() + " got snake and went from " +
+                        playerNextCoord + " to " + playerJumpCoord);
+            }
+
+            Position jumpPos = new Position(playerJumpCoord);
+            playerPosition.put(nextPlayer.getId(), jumpPos);
+        }
+        else{
+
+            System.out.println(nextPlayer.getPlayerName() + " went from " + playerPos.getCoordinate() +
+                    " to " + playerNextCoord);
+            Position finalPos = new Position(playerNextCoord);
+            playerPosition.put(nextPlayer.getId(), finalPos);
+        }
+
+        playerQueue.offer(nextPlayer);
     }
 
     // game starts
