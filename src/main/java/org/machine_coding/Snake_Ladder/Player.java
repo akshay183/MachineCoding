@@ -9,9 +9,9 @@ import lombok.Data;
 @Builder
 public class Player {
 
-    int id;
+    private int id;
 
-    String playerName;
+    private String playerName;
 
-    int numMatchesPlayed;
+    private int numMatchesPlayed;
 }

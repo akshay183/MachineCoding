@@ -18,7 +18,7 @@ public class Game {
                 build();
 
         List<Player> players = new ArrayList<>(Arrays.asList(p1,p2));
-        Board board = new Board(2, players, 100, 100);
+        Board board = new Board(2, players, 100);//minimum board size is 100 apply this limit.
 
         board.startGame();
     }

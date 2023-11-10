@@ -7,8 +7,8 @@ public class Board {
     private final int boardSize;
     private final int numDice;
     private final Queue<Player> playerQueue;
-    private Map<Integer, Position> playerPosition;
-    private Map<Integer, Integer> boardDistribution;  // return final location position as value.
+    private Map<Integer, Position> playerPosition; // put(playerId, position)
+    private Map<Position, Position> boardDistribution;  // return final location position as value.
 
 
     public Board(int numDice, List<Player> players, int boardSize) {
@@ -19,13 +19,33 @@ public class Board {
         playerPosition = new HashMap<>();
         boardDistribution = new HashMap<>();
 
-        distributeBoard();
+        distributeBoard(players);
     }
 
     //randomise distribution of snakes and ladder.
-    private void distributeBoard() {
+    private void distributeBoard(List<Player> players) {
 
+        for(Player player : players) {
 
+            Position initialPos = new Position(0);
+            playerPosition.put(player.getId(), initialPos);
+        }
+
+        Random random = new Random();
+        int numberOfJumps = random.nextInt(boardSize/20 - 1) + 2;
+
+        for(int i=0;i<numberOfJumps;i++) {
+
+             Position initialPos = new Position(random.nextInt( (boardSize-10) - 20 + 1) + 20);
+             Position finalPos = new Position(random.nextInt((initialPos.getCoordinate()+15) -
+                     (initialPos.getCoordinate()-15) + 1) + (initialPos.getCoordinate()-15));
+
+             if(finalPos.getCoordinate() >= boardSize || boardDistribution.containsKey(initialPos)) {
+                 i--;
+                 continue;
+             }
+             boardDistribution.put(initialPos, finalPos);
+        }
     }
 
     // roll dice
