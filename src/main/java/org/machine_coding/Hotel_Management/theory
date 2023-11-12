@@ -1,0 +1,6 @@
+Amenities----------------many to many----------------Room
+Admin is controlling particular block instead of rooms.
+Guest----------------one to many----------------Booking
+Booking----------------one to many----------------Room
+Room----------------many to many----------------HouseKeeper
+Transaction----------------one to one----------------Booking
